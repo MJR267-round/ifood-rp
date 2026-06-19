@@ -1,0 +1,23 @@
+{
+  "name": "ifood-rp-frontend",
+  "version": "1.0.0",
+  "description": "iFood RP - Plataforma de Delivery",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000 || php -S localhost:3000",
+    "dev": "python -m http.server 3000 || php -S localhost:3000",
+    "build": "echo 'Static files ready for deployment'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "ifood",
+    "delivery",
+    "roleplay",
+    "restaurant"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^latest"
+  }
+}
