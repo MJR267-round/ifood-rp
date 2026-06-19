@@ -1,0 +1,868 @@
+/* ==================== GLOBAL ==================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-red: #FF0000;
+    --white: #FFFFFF;
+    --dark-gray: #333333;
+    --light-gray: #F5F5F5;
+    --border-color: #EEEEEE;
+    --admin-purple: #8B00FF;
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--white);
+    color: var(--dark-gray);
+    overflow: hidden;
+}
+
+html, body, #app {
+    width: 100%;
+    height: 100%;
+}
+
+/* ==================== SPLASH SCREEN ==================== */
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.6s ease-out;
+}
+
+.splash-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.splash-logo {
+    width: 100%;
+    height: 100%;
+    animation: splashGrow 2s ease-out forwards;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes splashGrow {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(8);
+        opacity: 0;
+    }
+}
+
+@keyframes splashSound {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ==================== APP CONTAINER ==================== */
+
+.app-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+}
+
+/* ==================== SCREENS ==================== */
+
+.screen {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+    animation: screenFadeIn 0.4s ease;
+}
+
+.screen.active {
+    display: flex;
+}
+
+@keyframes screenFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== HEADER ==================== */
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.app-header h1 {
+    font-size: 20px;
+    color: var(--primary-red);
+    font-weight: bold;
+    flex: 1;
+    text-align: center;
+}
+
+.menu-button,
+.back-button,
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: var(--transition);
+    color: var(--dark-gray);
+}
+
+.menu-button:hover,
+.back-button:hover,
+.icon-btn:hover {
+    background: var(--light-gray);
+}
+
+.header-icons {
+    display: flex;
+    gap: 8px;
+}
+
+/* ==================== SIDEBAR MENU ==================== */
+
+.sidebar-menu {
+    position: fixed;
+    left: -100%;
+    top: 0;
+    width: 70%;
+    max-width: 300px;
+    height: 100%;
+    background: var(--white);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+}
+
+.sidebar-menu.open {
+    left: 0;
+}
+
+.menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.menu-header h3 {
+    color: var(--primary-red);
+    font-size: 18px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--dark-gray);
+}
+
+.menu-list {
+    list-style: none;
+    padding: 8px 0;
+}
+
+.menu-list li {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.menu-list a {
+    display: block;
+    padding: 16px;
+    color: var(--dark-gray);
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 16px;
+}
+
+.menu-list a:hover {
+    background: var(--light-gray);
+    color: var(--primary-red);
+}
+
+#admin-link a {
+    color: var(--admin-purple);
+}
+
+/* ==================== OVERLAY ==================== */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+/* ==================== LOGIN & SIGNUP SCREENS ==================== */
+
+.login-screen,
+.signup-screen {
+    background: var(--white);
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container,
+.signup-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    animation: screenFallDown 0.6s ease;
+}
+
+@keyframes screenFallDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-header,
+.signup-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form h2 {
+    font-size: 24px;
+    color: var(--dark-gray);
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+}
+
+/* ==================== BUTTONS ==================== */
+
+.btn {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--primary-red);
+    color: var(--white);
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background: #CC0000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+.btn-secondary {
+    background: var(--light-gray);
+    color: var(--dark-gray);
+    width: 100%;
+}
+
+.btn-secondary:hover {
+    background: #EEEEEE;
+}
+
+.btn-send {
+    background: var(--primary-red);
+    color: var(--white);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-send:hover {
+    background: #CC0000;
+}
+
+/* ==================== DIVIDER ==================== */
+
+.divider {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    margin: 8px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    display: inline-block;
+    width: 40%;
+    height: 1px;
+    background: var(--border-color);
+    vertical-align: middle;
+}
+
+.divider::before {
+    margin-right: 12px;
+}
+
+.divider::after {
+    margin-left: 12px;
+}
+
+/* ==================== LOGIN & SIGNUP FOOTER ==================== */
+
+.login-footer,
+.signup-footer {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 16px;
+}
+
+.login-footer a,
+.signup-footer a {
+    color: var(--primary-red);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-footer a:hover,
+.signup-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ==================== CONTENT ==================== */
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+/* ==================== HOME SCREEN ==================== */
+
+.hero {
+    text-align: center;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+}
+
+.hero h2 {
+    font-size: 24px;
+    color: var(--primary-red);
+    margin-bottom: 8px;
+}
+
+.hero p {
+    color: #666;
+    font-size: 14px;
+}
+
+.featured h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: var(--dark-gray);
+}
+
+/* ==================== RESTAURANTS GRID ==================== */
+
+.restaurants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.restaurant-card {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+}
+
+.restaurant-image {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, var(--primary-red), #CC0000);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+}
+
+.restaurant-info {
+    padding: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.restaurant-info h3 {
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: var(--dark-gray);
+}
+
+.restaurant-info p {
+    font-size: 12px;
+    color: #999;
+}
+
+/* ==================== SEARCH BAR ==================== */
+
+.search-bar {
+    padding: 16px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--primary-red);
+}
+
+/* ==================== ORDERS LIST ==================== */
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.order-item {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.order-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-item-info h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: var(--dark-gray);
+}
+
+.order-item-info p {
+    font-size: 12px;
+    color: #999;
+}
+
+.order-item-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.status-pending {
+    background: #FFF3CD;
+    color: #856404;
+}
+
+.status-confirmed {
+    background: #D1ECF1;
+    color: #0C5460;
+}
+
+.status-delivered {
+    background: #D4EDDA;
+    color: #155724;
+}
+
+.status-cancelled {
+    background: #F8D7DA;
+    color: #721C24;
+}
+
+/* ==================== PROFILE ==================== */
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.profile-info {
+    background: var(--light-gray);
+    padding: 24px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.profile-info h2 {
+    font-size: 24px;
+    color: var(--primary-red);
+    margin-bottom: 8px;
+}
+
+.profile-info p {
+    font-size: 14px;
+    color: #666;
+    margin: 4px 0;
+}
+
+#edit-profile-btn {
+    width: 100%;
+}
+
+/* ==================== CHAT ==================== */
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.chat-message {
+    display: flex;
+    margin: 8px 0;
+}
+
+.chat-message.sent {
+    justify-content: flex-end;
+}
+
+.chat-message.received {
+    justify-content: flex-start;
+}
+
+.chat-bubble {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.chat-message.sent .chat-bubble {
+    background: var(--primary-red);
+    color: var(--white);
+}
+
+.chat-message.received .chat-bubble {
+    background: var(--light-gray);
+    color: var(--dark-gray);
+}
+
+.chat-form {
+    display: flex;
+    gap: 8px;
+}
+
+.chat-form input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.chat-form input:focus {
+    outline: none;
+    border-color: var(--primary-red);
+}
+
+/* ==================== ADMIN ==================== */
+
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    overflow-x: auto;
+}
+
+.admin-tab {
+    background: none;
+    border: none;
+    padding: 12px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #999;
+    border-bottom: 3px solid transparent;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.admin-tab.active {
+    color: var(--admin-purple);
+    border-bottom-color: var(--admin-purple);
+}
+
+.admin-tab:hover {
+    color: var(--admin-purple);
+}
+
+.admin-content {
+    display: none;
+}
+
+.admin-content.active {
+    display: block;
+}
+
+.admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.admin-item {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-item-info h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: var(--dark-gray);
+}
+
+.admin-item-info p {
+    font-size: 12px;
+    color: #999;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.admin-btn {
+    background: var(--admin-purple);
+    color: var(--white);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: var(--transition);
+}
+
+.admin-btn:hover {
+    background: #6B00CC;
+}
+
+.admin-btn-delete {
+    background: #DC3545;
+}
+
+.admin-btn-delete:hover {
+    background: #C82333;
+}
+
+/* ==================== NOTIFICATION ==================== */
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    background: var(--primary-red);
+    color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+    max-width: 300px;
+}
+
+.notification.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 600px) {
+    .restaurants-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .logo {
+        width: 80px;
+        height: 80px;
+    }
+
+    .form h2 {
+        font-size: 20px;
+    }
+
+    .chat-bubble {
+        max-width: 85%;
+    }
+
+    .sidebar-menu {
+        width: 80%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .restaurants-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .app-header h1 {
+        font-size: 18px;
+    }
+
+    .login-container,
+    .signup-container {
+        padding: 16px;
+    }
+}
